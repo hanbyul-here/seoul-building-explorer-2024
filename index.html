@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <link href='https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css' rel='stylesheet' />
+  <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      #map {  
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
+      body {
+        overflow: hidden;
+      }
+
+      body * {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      #wrapper {
+        position: absolute;
+        top: 0;
+         bottom: 0;
+         width: 100%;
+         height: 100%;
+      }
+
+      .maps {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+      }
+      #yearcontrol {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background-color: white;
+        padding: 15px;
+      }
+      /* button {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        z-index: 5000;
+      } */
+      
+  </style>
+</head>
+<body>
+  <div id="wrapper">
+    <div class="maps" id="compare-map"></div>
+    <div class="maps" id="map"></div>
+  </div>
+  <!-- <button onclick="test()">Click</button> -->
+  <div id="yearcontrol"></div>
+  <script type="module" src="main.js" ></script>
+</body>
+</html>
