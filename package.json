@@ -5,7 +5,7 @@
   "main": "maplibre-gl-compare.js",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --mode production",
+    "build": "vite build --mode production --base=/seoul-building-explorer-2023/",
     "preview": "vite preview"
   },
   "author": "",

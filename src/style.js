@@ -1,10 +1,10 @@
 import layers from 'protomaps-themes-base';
 import { fillExtrucionColorConditions, extrudedHeightValue } from './constants';
 
-const dataUrl = import.meta.env.PROD? 'https://seoul-building-2023.s3.ap-northeast-2.amazonaws.com' : `${window.location.origin}`;
+const dataUrl = import.meta.env.PROD? 'https://seoul-building-2023.s3.ap-northeast-2.amazonaws.com' : import.meta.env.BASE_URL;
 
-const relativeDataUrl = `${window.location.origin}`;
-const basemapDataUrl = `${window.location.origin}`;
+const relativeDataUrl = import.meta.env.BASE_URL
+const basemapDataUrl = import.meta.env.BASE_URL
 
 const notVisibleLayerKeyWords = ["transit", "poi", "buildings", 'landuse', 'pois']
 const baseMapFoundation = {
