@@ -128,3 +128,9 @@ dist
 ociplus_info.zip
 ociplus_info.csv
 .env.local
+
+data/output/*
+public/bd_2017.pmtiles 
+public/bd_2023.pmtiles 
+public/bdc_2017.pmtiles 
+public/bdc_2023.pmtiles 

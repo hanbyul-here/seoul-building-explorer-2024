@@ -5,7 +5,7 @@
   "main": "maplibre-gl-compare.js",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build --mode production",
     "preview": "vite preview"
   },
   "author": "",
@@ -16,11 +16,15 @@
     "maplibre-gl": "^3.6.2",
     "pmtiles": "^2.11.0",
     "preact": "^10.19.3",
-    "protomaps-themes-base": "^2.0.0-alpha.4"
+    "protomaps-themes-base": "^2.0.0-alpha.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-map-gl": "^7.1.7"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.7.0",
     "@prefresh/vite": "^2.4.5",
+    "@vitejs/plugin-react": "^4.2.1",
     "vite": "^5.0.10"
   }
 }
