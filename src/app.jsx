@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import * as pmtiles from 'pmtiles';
 import * as maplibregl from 'maplibre-gl';
-import { MapProvider, Map, Source, Layer, Popup } from 'react-map-gl/maplibre';
+import { MapProvider, Map, Source, Layer, Popup, NavigationControl, GeolocateControl } from 'react-map-gl/maplibre';
 import { ControlPanel } from './control'
 import { baseMapStyle, sourcesArr2017, sourcesArr2023, getLayers } from './style';
 import { LanguageEng, LanguageKr } from './lang'
@@ -89,6 +89,7 @@ export default function App() {
         style={MAP_CONTAINER_STYLE}
         mapStyle={baseMapStyle}
         onClick={onClick}
+        maxBounds={[126.684927,37.423433,127.261022,37.702655]}
         interactiveLayerIds={interactiveLayerIds}
         hash
       >
@@ -108,6 +109,11 @@ export default function App() {
             {popupInfo.feature.value}
           </Popup>)
         }
+        <NavigationControl position="bottom-right" />
+        <GeolocateControl position="bottom-right" 
+          // onOutOfMaxBounds={} 
+          // onError
+        />
       </Map>
       {compareMode &&
           <Map
@@ -135,6 +141,7 @@ export default function App() {
             {popupInfo.feature.value}
             </Popup>)
           }
+            
           </Map>
         }
         <ControlPanel
