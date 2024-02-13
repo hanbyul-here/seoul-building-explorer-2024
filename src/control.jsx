@@ -7,7 +7,7 @@ import "@maplibre/maplibre-gl-compare/dist/maplibre-gl-compare.css";
 import { virdisColors, expressionConditions, completeColorExpression, nullKeyExpression, missingColor, extrudedHeightValue } from './constants';
 import { getAllUpdatedColorLayers, getAllUpdatedHeightLayers } from './style'
 
-export function CompareControl ({compareMode, onChange, customMapLayers, setLayers }) {
+export function CompareControl ({compareMode, onChange, customMapLayers, setLayers, lang }) {
   const maps = useMap()
   const map2023 = maps['map-2023']
   const map2017 = maps['map-2017']
@@ -37,12 +37,12 @@ export function CompareControl ({compareMode, onChange, customMapLayers, setLaye
   return (
     <label className="switch">
       <input type="checkbox" onChange={onClick} checked={compareMode} />
-      <span className="slider">Compare the data to 2017</span>
+      <span className="slider">{lang['compare']}</span>
     </label>
   )
 }
 
-export function YearControl ({ customMapLayers, setLayers, compareMapLayers, setCompareMapLayers }) {
+export function YearControl ({ customMapLayers, setLayers, compareMapLayers, setCompareMapLayers, lang }) {
   const [selectedIdx, setSelectedIdx] = useState(null)
 
   // Show All
@@ -70,19 +70,21 @@ export function YearControl ({ customMapLayers, setLayers, compareMapLayers, set
     <div>
       {virdisColors.map((color, idx) => {
         const style = (selectedIdx!== null)? idx === selectedIdx? {backgroundColor: color} : {backgroundColor: 'grey'}: {backgroundColor: color};
-        return <button key={color} onClick={() => {onClick(idx)}} style ={style}> {1920 + idx * 10} </button>
+        return <button className="colorblock" key={color} onClick={() => {onClick(idx)}} style ={style}> {1920 + idx * 10} </button>
       })}
-      <button onClick={() => {onClick(null)}}> Show All </button>
+      <button className="show-all" onClick={() => {onClick(null)}}> {lang['show']} </button>
     </div>
     
   )
 }
 
-export function ControlPanel({onYearChange, onCompareChange, compareMode, layers, setLayers, compareMapLayers, setCompareMapLayers }) {
+export function ControlPanel({onCompareChange, compareMode, layers, setLayers, compareMapLayers, setCompareMapLayers, lang }) {
   return (
     <div id="control">
-      <YearControl customMapLayers={layers} setLayers = {setLayers} compareMapLayers={compareMapLayers} setCompareMapLayers = {setCompareMapLayers} />
-      <CompareControl onChange={onCompareChange} compareMode={compareMode} customMapLayers={layers} setLayers = {setLayers} compareMapLayers={compareMapLayers} setCompareMapLayers={setCompareMapLayers} />
+      <h3>{lang['title']}</h3>
+      <p dangerouslySetInnerHTML={{ __html:lang['description']}} />
+      <YearControl customMapLayers={layers} setLayers = {setLayers} compareMapLayers={compareMapLayers} setCompareMapLayers = {setCompareMapLayers} lang={lang} />
+      <CompareControl onChange={onCompareChange} compareMode={compareMode} customMapLayers={layers} setLayers = {setLayers} compareMapLayers={compareMapLayers} setCompareMapLayers={setCompareMapLayers} lang={lang} />
     </div>
   )
 }

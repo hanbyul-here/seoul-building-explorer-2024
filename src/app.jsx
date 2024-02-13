@@ -4,11 +4,11 @@ import * as maplibregl from 'maplibre-gl';
 import { MapProvider, Map, Source, Layer, Popup } from 'react-map-gl/maplibre';
 import { ControlPanel } from './control'
 import { baseMapStyle, sourcesArr2017, sourcesArr2023, getLayers } from './style';
-
+import { LanguageEng, LanguageKr } from './lang'
 
 const INITIAL_VIEW_STATE = {
   center: [126.9761,37.5749],
-  zoom: 14,
+  zoom: 15,
   pitch: 20
 }
 const MAP_CONTAINER_STYLE = { 
@@ -19,12 +19,21 @@ const MAP_CONTAINER_STYLE = {
   height: '100%'
 }
 
+function formatTooltipText(string, undefinedVal) {
+  if (!string || !string.length || string == 0) return undefinedVal
+  if (string[4] == 0 && string[6] == 0 ) return string[0] + string[1] + string[2] + string[3] + '년 '+ string[5] +' 월' + string[7] + '일';
+  if (string[4] != 0 && string[6] == 0 ) return string[0] + string[1] + string[2] + string[3] + '년 '+ string[4] + string[5] +' 월' + string[7] + '일';
+  else if (string[4] == 0 && string[6] != 0 ) return string[0] + string[1] + string[2] + string[3] + '년 '+  string[5] +' 월' + string[6] + string[7] + '일';
+  else return string[0] + string[1] + string[2] + string[3] + '년 '+ string[4] + string[5] +' 월' + string[6] + string[7] + '일';
+}
 
 export default function App() {
   const [layers, setLayers] = useState(getLayers(2023))
   const [layers2017, setLayers2017] = useState(getLayers(2017))
   const [popupInfo, setPopupInfo] = useState(null);
   const [compareMode, setCompareMode] = useState(false)
+  const searchParams = new URLSearchParams(document.location.search)
+  const langToUse = searchParams.get('lang') === 'kr'? LanguageKr: LanguageEng;
 
   const [viewState, setViewState] = useState({
     longitude: INITIAL_VIEW_STATE.center[0],
@@ -57,10 +66,9 @@ export default function App() {
         lngLat: evt.lngLat,
         feature: 
           {
-            key: fp.USEAPR_DAY? 'Approval day of use:' : `Average of ${fp.EMD_NM}: `,
-            value: fp.USEAPR_DAY || fp.APR_Y
+            key: fp.USEAPR_DAY? langToUse['date'] : langToUse['averageYear'],
+            value: formatTooltipText(fp.USEAPR_DAY, langToUse['undefined']) || math.round(fp.APR_Y)
           }
-        
       });
     }
 
@@ -95,8 +103,8 @@ export default function App() {
             anchor="bottom"
             onClose={() => setPopupInfo(null)}
           >
-            <b> 2023</b> <br />
-            {popupInfo.feature.key} : 
+            <b> 2023 </b> <br />
+            {popupInfo.feature.key} :
             {popupInfo.feature.value}
           </Popup>)
         }
@@ -136,6 +144,7 @@ export default function App() {
           setLayers={setLayers}
           compareMapLayers={layers2017}
           setCompareMapLayers={setLayers2017}
+          lang={langToUse}
         />
     </MapProvider>
   );

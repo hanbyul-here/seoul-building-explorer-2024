@@ -20,14 +20,14 @@ export const sources2017 = {
   "buildings": {
     "type": "vector",
     "url": `pmtiles://${dataUrl}/bd_2017.pmtiles`,
-    minzoom: 14,
+    minzoom: 15,
     maxzoom: 16
   },
   "centroids": {
     "type": "vector",
     "url": `pmtiles://${dataUrl}/bdc_2017.pmtiles`,
     minzoom: 13,
-    maxzoom: 14
+    maxzoom: 15
   }, 
   "dong": {
     "type": "geojson",
@@ -39,14 +39,14 @@ export const sources2023 = {
   "buildings": {
     "type": "vector",
     "url": `pmtiles://${dataUrl}/bd_2023.pmtiles`,
-    minzoom: 14,
+    minzoom: 15,
     maxzoom: 16
   },
   "centroids": {
     "type": "vector",
     "url": `pmtiles://${dataUrl}/bdc_2023.pmtiles`,
     minzoom: 13,
-    maxzoom: 14
+    maxzoom: 15
   }, // Centroids don't line up :[
   "dong": {
     "type": "geojson",
@@ -99,7 +99,7 @@ export function getLayers(year) {
     "source": "buildings",
     "source-layer": `bd_${year}`,
     "type": 'fill-extrusion',
-    minzoom: 14,
+    minzoom: 15,
     "paint": {
       'fill-extrusion-color':
       // Give #666 to null value
@@ -114,7 +114,7 @@ export function getLayers(year) {
     "source": "centroids",
     "source-layer": `bdc_${year}`,
     "type": 'circle',
-    maxzoom: 14,
+    maxzoom: 15,
     "paint": {
       'circle-color': ["case", ["==", ["get", keyWord], null], '#666',
       ['case',...fillExtrucionColorConditions(keyWord), '#666']],
