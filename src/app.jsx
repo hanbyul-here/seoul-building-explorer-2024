@@ -33,7 +33,7 @@ export default function App() {
   const [popupInfo, setPopupInfo] = useState(null);
   const [compareMode, setCompareMode] = useState(false)
   const searchParams = new URLSearchParams(document.location.search)
-  const langToUse = searchParams.get('lang') === 'kr'? LanguageKr: LanguageEng;
+  const langToUse = searchParams.get('lang') === 'en'? LanguageEng: LanguageKr;
 
   const [viewState, setViewState] = useState({
     longitude: INITIAL_VIEW_STATE.center[0],
