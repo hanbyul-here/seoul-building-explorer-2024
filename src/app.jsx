@@ -39,6 +39,7 @@ export default function App() {
     longitude: INITIAL_VIEW_STATE.center[0],
     latitude: INITIAL_VIEW_STATE.center[1],
     zoom: INITIAL_VIEW_STATE.zoom,
+    bearint: 0,
     pitch: INITIAL_VIEW_STATE.pitch
   });
 
@@ -46,6 +47,20 @@ export default function App() {
   useEffect(() => {
     const protocol = new pmtiles.Protocol()
     maplibregl.addProtocol('pmtiles', protocol.tile)
+
+    // When map gets the first view state with hash value, compare map doesn't get the updated value
+    // Therefore we set the viewState with the hash value on landing
+    const hashValue = window.location.hash.substring(1);
+    const parts = hashValue.split('/');
+
+    setViewState({
+      longitude: parts[2],
+      latitude: parts[1],
+      zoom: parts[0],
+      bearing: parts[3],
+      pitch: parts[4]
+    })
+
     return () => {
       maplibregl.removeProtocol('pmtiles')
     }
@@ -74,7 +89,6 @@ export default function App() {
 
     else setPopupInfo(null)
   }, []);
-  // console.log(viewState)
   return (
     <MapProvider>
       <Map
@@ -152,6 +166,7 @@ export default function App() {
           compareMapLayers={layers2017}
           setCompareMapLayers={setLayers2017}
           lang={langToUse}
+          setViewState={setViewState}
         />
     </MapProvider>
   );
