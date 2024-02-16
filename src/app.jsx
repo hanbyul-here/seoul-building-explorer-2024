@@ -115,7 +115,7 @@ export default function App() {
           // onError
         />
       </Map>
-      {compareMode &&
+      {compareMode &&        
           <Map
             id="map-2017" 
             initialViewState={viewState}
