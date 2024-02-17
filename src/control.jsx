@@ -37,7 +37,7 @@ export function CompareControl ({compareMode, onChange, customMapLayers, setLaye
   return (
     <label className="switch">
       <input type="checkbox" onChange={onClick} checked={compareMode} />
-      <span className="slider">{lang['compare']}</span>
+      <span dangerouslySetInnerHTML={{__html: lang['compare']}} className="slider" />
     </label>
   )
 }

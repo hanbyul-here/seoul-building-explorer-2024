@@ -19,12 +19,12 @@ const MAP_CONTAINER_STYLE = {
   height: '100%'
 }
 
-function formatTooltipText(string, undefinedVal) {
-  if (!string || !string.length || string == 0) return undefinedVal
-  if (string[4] == 0 && string[6] == 0 ) return string[0] + string[1] + string[2] + string[3] + '년 '+ string[5] +' 월' + string[7] + '일';
-  if (string[4] != 0 && string[6] == 0 ) return string[0] + string[1] + string[2] + string[3] + '년 '+ string[4] + string[5] +' 월' + string[7] + '일';
-  else if (string[4] == 0 && string[6] != 0 ) return string[0] + string[1] + string[2] + string[3] + '년 '+  string[5] +' 월' + string[6] + string[7] + '일';
-  else return string[0] + string[1] + string[2] + string[3] + '년 '+ string[4] + string[5] +' 월' + string[6] + string[7] + '일';
+function formatTooltipText(string, langToUse) {
+  if (!string || !string.length || string == 0) return langToUse['undefined']
+  if (string[4] == 0 && string[6] == 0 ) return string[0] + string[1] + string[2] + string[3] + langToUse['yearFormat']+ string[5] +langToUse['monthFormat'] + string[7] + langToUse['dayFormat'];
+  if (string[4] != 0 && string[6] == 0 ) return string[0] + string[1] + string[2] + string[3] + langToUse['yearFormat'] + string[4] + string[5] +langToUse['monthFormat'] + string[7] + langToUse['dayFormat'];
+  else if (string[4] == 0 && string[6] != 0 ) return string[0] + string[1] + string[2] + string[3] + langToUse['yearFormat']+  string[5] +langToUse['monthFormat'] + string[6] + string[7] + langToUse['dayFormat'];
+  else return string[0] + string[1] + string[2] + string[3] + langToUse['yearFormat']+ string[4] + string[5] +langToUse['monthFormat'] + string[6] + string[7] + langToUse['dayFormat'];
 }
 
 export default function App() {
@@ -33,7 +33,9 @@ export default function App() {
   const [popupInfo, setPopupInfo] = useState(null);
   const [compareMode, setCompareMode] = useState(false)
   const searchParams = new URLSearchParams(document.location.search)
-  const langToUse = searchParams.get('lang') === 'en'? LanguageEng: LanguageKr;
+  
+  const isEng = searchParams.get('lang')?.includes('en')
+  const langToUse = isEng? LanguageEng : LanguageKr;
 
   const [viewState, setViewState] = useState({
     longitude: INITIAL_VIEW_STATE.center[0],
@@ -77,18 +79,20 @@ export default function App() {
   const onClick = useCallback(evt => { 
     if (evt.features?.length && evt.features[0].properties ){
       const fp = evt.features[0].properties
+      const dongKeyVal = isEng? `${langToUse['averageYear']} of ${langToUse['dong']} <br/> ${fp.EMD_NM} ` : ` ${langToUse['averageYear']}<br/>${fp.EMD_NM} `
       setPopupInfo({
         lngLat: evt.lngLat,
         feature: 
           {
-            key: fp.USEAPR_DAY? langToUse['date'] : langToUse['averageYear'],
-            value: formatTooltipText(fp.USEAPR_DAY, langToUse['undefined']) || math.round(fp.APR_Y)
+            key: viewState.zoom < 13 ?  dongKeyVal : langToUse['date'],
+            value:  viewState.zoom < 13 ?   Math.round(fp.APR_Y) : formatTooltipText(fp.USEAPR_DAY, langToUse)
           }
       });
     }
 
     else setPopupInfo(null)
-  }, []);
+  }, [viewState.zoom]);
+
   return (
     <MapProvider>
       <Map
@@ -119,7 +123,7 @@ export default function App() {
             onClose={() => setPopupInfo(null)}
           >
             <b> 2023 </b> <br />
-            {popupInfo.feature.key} :
+            <span dangerouslySetInnerHTML={{__html: popupInfo.feature.key}} />  :
             {popupInfo.feature.value}
           </Popup>)
         }
@@ -151,7 +155,7 @@ export default function App() {
               onClose={() => setPopupInfo(null)}
             >
             <b> 2017</b> <br />
-            {popupInfo.feature.key} : 
+            <span dangerouslySetInnerHTML={{__html: popupInfo.feature.key}} /> : 
             {popupInfo.feature.value}
             </Popup>)
           }
