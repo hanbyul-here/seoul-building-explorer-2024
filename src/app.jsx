@@ -3,6 +3,7 @@ import * as pmtiles from 'pmtiles';
 import * as maplibregl from 'maplibre-gl';
 import { MapProvider, Map, Source, Layer, Popup, NavigationControl, GeolocateControl } from 'react-map-gl/maplibre';
 import { ControlPanel } from './control'
+import GeocoderControl from './geocoder';
 import { baseMapStyle, sourcesArr2017, sourcesArr2023, getLayers } from './style';
 import { LanguageEng, LanguageKr } from './lang'
 
@@ -132,6 +133,7 @@ export default function App() {
           // onOutOfMaxBounds={} 
           // onError
         />
+        <GeocoderControl position="top-left" />
       </Map>
       {compareMode &&        
           <Map
@@ -159,7 +161,7 @@ export default function App() {
             {popupInfo.feature.value}
             </Popup>)
           }
-            
+          
           </Map>
         }
         <ControlPanel
@@ -172,6 +174,7 @@ export default function App() {
           lang={langToUse}
           setViewState={setViewState}
         />
+
     </MapProvider>
   );
 }
