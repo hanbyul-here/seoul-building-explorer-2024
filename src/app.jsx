@@ -80,14 +80,28 @@ export default function App() {
   const onClick = useCallback(evt => { 
     if (evt.features?.length && evt.features[0].properties ){
       const fp = evt.features[0].properties
-      const dongKeyVal = isEng? `${langToUse['averageYear']} of ${langToUse['dong']} <br/> ${fp.EMD_NM} ` : ` ${langToUse['averageYear']}<br/>${fp.EMD_NM} `
+      const dongKeyVal = isEng? `${langToUse['averageYear']} of ${langToUse['dong']}` : `${langToUse['averageYear']}`
+
+      let fs = [{
+        key: viewState.zoom < 13 ?  dongKeyVal : langToUse['date'],
+        value:  viewState.zoom < 13 ?   Math.round(fp.APR_Y) : formatTooltipText(fp.USEAPR_DAY, langToUse)
+      }, {
+        key: langToUse['dong'],
+        value: viewState.zoom < 13 ? fp.EMD_NM: fp.DONG
+      }]
+      if (viewState.zoom >= 15) {
+        fs = [...fs, 
+          {
+          key: langToUse['address'],
+          value: fp.BEONJI? `${parseInt(fp.BEONJI.slice(0,4))}-${parseInt(fp.BEONJI.slice(4,8))}번지`:''
+        },{
+          key: langToUse['bname'],
+          value: fp.BLD_NM
+        } ]
+      }
       setPopupInfo({
         lngLat: evt.lngLat,
-        feature: 
-          {
-            key: viewState.zoom < 13 ?  dongKeyVal : langToUse['date'],
-            value:  viewState.zoom < 13 ?   Math.round(fp.APR_Y) : formatTooltipText(fp.USEAPR_DAY, langToUse)
-          }
+        features: fs
       });
     }
 
@@ -123,9 +137,16 @@ export default function App() {
             anchor="bottom"
             onClose={() => setPopupInfo(null)}
           >
-            <b> 2023 </b> <br />
-            <span dangerouslySetInnerHTML={{__html: popupInfo.feature.key}} />  :
-            {popupInfo.feature.value}
+            <strong> 2023 </strong>
+            {popupInfo.features.map(f => {
+              return (
+                <div key={f.key}>
+                  <strong>{f.key}: </strong>
+                  <span>{f.value}</span>
+                </div>
+              )
+            })}
+
           </Popup>)
         }
         <NavigationControl position="bottom-right" />
@@ -151,7 +172,7 @@ export default function App() {
               <Layer {...matchingLayer} />
             </Source>
           })}
-          {popupInfo && (
+          {/* {popupInfo && (
             <Popup longitude={popupInfo.lngLat.lng} latitude={popupInfo.lngLat.lat}
               anchor="bottom"
               onClose={() => setPopupInfo(null)}
@@ -160,7 +181,7 @@ export default function App() {
             <span dangerouslySetInnerHTML={{__html: popupInfo.feature.key}} /> : 
             {popupInfo.feature.value}
             </Popup>)
-          }
+          } */}
           
           </Map>
         }

@@ -3,7 +3,6 @@ import { useMap } from 'react-map-gl/maplibre';
 // I had to install events package to use maplibre-gl-compare
 import * as MaplibreglCompare from "@maplibre/maplibre-gl-compare";
 import "@maplibre/maplibre-gl-compare/dist/maplibre-gl-compare.css";
-
 import { virdisColors, expressionConditions, completeColorExpression, nullKeyExpression, missingColor, extrudedHeightValue } from './constants';
 import { getAllUpdatedColorLayers, getAllUpdatedHeightLayers } from './style'
 

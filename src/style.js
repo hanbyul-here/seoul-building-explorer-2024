@@ -38,7 +38,7 @@ export const sources2017 = {
 export const sources2023 = {
   "buildings": {
     "type": "vector",
-    "url": `pmtiles://${dataUrl}/bd_2023.pmtiles`,
+    "url": `pmtiles://${dataUrl}/bd_2023_v1.pmtiles`,
     minzoom: 15,
     maxzoom: 16
   },
