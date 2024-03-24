@@ -81,7 +81,7 @@ export function ControlPanel({onCompareChange, compareMode, layers, setLayers, c
   return (
     <div id="control">
       <h1>{lang['title']}</h1>
-      <p dangerouslySetInnerHTML={{ __html:lang['description']}} />
+      <p className="description" dangerouslySetInnerHTML={{ __html:lang['description']}} />
       <YearControl customMapLayers={layers} setLayers = {setLayers} compareMapLayers={compareMapLayers} setCompareMapLayers = {setCompareMapLayers} lang={lang} />
       <CompareControl onChange={onCompareChange} compareMode={compareMode} customMapLayers={layers} setLayers = {setLayers} compareMapLayers={compareMapLayers} setCompareMapLayers={setCompareMapLayers} lang={lang} />
     </div>

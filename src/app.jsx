@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import * as pmtiles from 'pmtiles';
 import * as maplibregl from 'maplibre-gl';
-import { MapProvider, Map, Source, Layer, Popup, NavigationControl, GeolocateControl } from 'react-map-gl/maplibre';
+import { MapProvider, Map, Source, Layer, Popup, NavigationControl, GeolocateControl, AttributionControl } from 'react-map-gl/maplibre';
 import { ControlPanel } from './control'
 import GeocoderControl from './geocoder';
 import { baseMapStyle, sourcesArr2017, sourcesArr2023, getLayers } from './style';
@@ -45,7 +45,6 @@ export default function App() {
     bearint: 0,
     pitch: INITIAL_VIEW_STATE.pitch
   });
-
   // Attach pmtile protocol to MapLibre
   useEffect(() => {
     const protocol = new pmtiles.Protocol()
@@ -149,12 +148,19 @@ export default function App() {
 
           </Popup>)
         }
+          <AttributionControl customAttribution={"Map data from <a href='https://openstreetmap.org/'>OpenStreetMap</a> | <a href='https://www.vworld.kr/dtmk/dtmk_ntads_s002.do?dsId=30524'>VWorld</a>"} 
+          compact={true}
+          position="bottom-right" />
         <NavigationControl position="bottom-right" />
         <GeolocateControl position="bottom-right" 
-          // onOutOfMaxBounds={} 
-          // onError
+          positionOptions={{
+            enableHighAccuracy: true
+          }}
+          trackUserLocation={true}
+          onError = {() => {console.log('error')}}
         />
         <GeocoderControl position="top-left" />
+
       </Map>
       {compareMode &&        
           <Map

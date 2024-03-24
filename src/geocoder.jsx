@@ -44,6 +44,7 @@ export default function GeocoderControl(props) {
           showResultMarkers: false,
           marker: false,
           flyTo: true,
+          collapsed: true,
           render: (json) => {
             return `<strong>${json.place_name}</strong><br><span>${json.text}</span>`;
           },
