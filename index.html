@@ -33,6 +33,7 @@
         max-width: 400px;
         font-size: 12px;
         padding: 10px;
+
       }
       h1 {
         font-size: 16px;
@@ -43,11 +44,13 @@
       }
       .show-all {
         width: 100%;
+        height: 24px;
+        margin-bottom: 5px;
       }
       .colorblock {
         width: 10%;
         float: left;
-        padding: 5px 0;
+        padding: 8px 0;
         color: white;
         text-align: center;
         cursor: pointer;
@@ -65,7 +68,23 @@
         right: -30px;
         text-shadow: 2px 2px 2px grey;
       }
-      
+      .switch {
+        display: flex;
+        align-items: center;
+        justify-content: end;
+        align-content: center;;
+        cursor: pointer;
+      }
+      .switch input[type=checkbox] {
+        width: 18px;
+        height: 18px;
+      }
+      @media (max-width: 768px) {
+        .slider a {
+          display: none;
+        }
+      }
+
   </style>
 </head>
 <body>
