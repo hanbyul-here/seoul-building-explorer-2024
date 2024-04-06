@@ -4,8 +4,9 @@ import * as maplibregl from 'maplibre-gl';
 import { MapProvider, Map, Source, Layer, Popup, NavigationControl, GeolocateControl, AttributionControl } from 'react-map-gl/maplibre';
 import { ControlPanel } from './control'
 import GeocoderControl from './geocoder';
-import { baseMapStyle, sourcesArr2017, sourcesArr2023, getLayers } from './style';
+import { baseMapStyle, sourcesArr2017, sourcesArr2023, getLayers, getAllUpdatedHeightLayers } from './style';
 import { LanguageEng, LanguageKr } from './lang'
+import { extrudedHeightValue } from './constants';
 
 const INITIAL_VIEW_STATE = {
   center: [126.9761,37.5749],
@@ -21,11 +22,17 @@ const MAP_CONTAINER_STYLE = {
 }
 
 function formatTooltipText(string, langToUse) {
-  if (!string || !string.length || string == 0) return langToUse['undefined']
-  if (string[4] == 0 && string[6] == 0 ) return string[0] + string[1] + string[2] + string[3] + langToUse['yearFormat']+ string[5] +langToUse['monthFormat'] + string[7] + langToUse['dayFormat'];
-  if (string[4] != 0 && string[6] == 0 ) return string[0] + string[1] + string[2] + string[3] + langToUse['yearFormat'] + string[4] + string[5] +langToUse['monthFormat'] + string[7] + langToUse['dayFormat'];
-  else if (string[4] == 0 && string[6] != 0 ) return string[0] + string[1] + string[2] + string[3] + langToUse['yearFormat']+  string[5] +langToUse['monthFormat'] + string[6] + string[7] + langToUse['dayFormat'];
-  else return string[0] + string[1] + string[2] + string[3] + langToUse['yearFormat']+ string[4] + string[5] +langToUse['monthFormat'] + string[6] + string[7] + langToUse['dayFormat'];
+  if (!string || !string.length || string === '0') return langToUse['undefined'];
+
+  // Extracting year, month, and day from the string
+  const year = string.slice(0, 4);
+  const month = string[4] === '0' ? string[5] : string.slice(4, 6);
+  const day = string[6] === '0' ? string[7] : string.slice(6);
+
+  const formattedMonth = month.length? `${month}${langToUse['monthFormat']}`: ''
+  const formattedDay = day.length? `${day}${langToUse['dayFormat']}`: ''
+
+  return `${year}${langToUse['yearFormat']}${formattedMonth}${formattedDay}`;
 }
 
 export default function App() {
@@ -71,9 +78,6 @@ export default function App() {
   const interactiveLayerIds = useMemo(() => {
     return layers.map(l => l.id)
   },[])
-  const interactiveLayer2017Ids = useMemo(() => {
-    return layers2017.map(l => l.id)
-  },[])
 
   const onMove = useCallback(evt => { setViewState(evt.viewState)}, []);
   const onClick = useCallback(evt => { 
@@ -107,6 +111,12 @@ export default function App() {
     else setPopupInfo(null)
   }, [viewState.zoom]);
 
+  function onCompareChange () {
+    setCompareMode(prev => !prev);
+  }
+
+  const newLayers = compareMode? getAllUpdatedHeightLayers(0, layers): getAllUpdatedHeightLayers(extrudedHeightValue, layers);
+
   return (
     <MapProvider>
       <Map
@@ -126,7 +136,7 @@ export default function App() {
         hash
       >
         {sourcesArr2023.map (cSource => {
-          const matchingLayer = layers.find(l => l.source === cSource.key);
+          const matchingLayer = newLayers.find(l => l.source === cSource.key);
           return <Source {...cSource}>
             <Layer {...matchingLayer} />
           </Source>
@@ -136,18 +146,31 @@ export default function App() {
             anchor="bottom"
             onClose={() => setPopupInfo(null)}
           >
-            <strong> 2023 </strong>
+            {compareMode && <strong> 2023 </strong>}
             {popupInfo.features.map(f => {
               return (
                 <div key={f.key}>
                   <strong>{f.key}: </strong>
-                  <span>{f.value}</span>
+                  <span>{!!f.value? f.value: langToUse['undefined']}</span>
                 </div>
               )
             })}
 
           </Popup>)
         }
+        <ControlPanel
+          compareMode={compareMode}
+          onCompareChange={onCompareChange}
+          layers={layers}
+          setLayers={setLayers}
+          compareMapLayers={layers2017}
+          setCompareMapLayers={setLayers2017}
+          lang={langToUse}
+          setViewState={setViewState}
+          position="top-right"
+        />
+        <GeocoderControl position="top-right" />
+        
           <AttributionControl customAttribution={"Map data from <a href='https://openstreetmap.org/'>OpenStreetMap</a> | <a href='https://www.vworld.kr/dtmk/dtmk_ntads_s002.do?dsId=30524'>VWorld</a>"} 
           compact={true}
           position="bottom-right" />
@@ -159,16 +182,13 @@ export default function App() {
           trackUserLocation={true}
           onError = {() => {console.log('error')}}
         />
-        <GeocoderControl position="top-left" />
-
       </Map>
-      {compareMode &&        
+      {compareMode &&
           <Map
             id="map-2017" 
             initialViewState={viewState}
             style={MAP_CONTAINER_STYLE}
             mapStyle={baseMapStyle}
-            interactiveLayerIds={interactiveLayer2017Ids}
             onClick={onClick}
             styleDiffing
           >
@@ -177,31 +197,9 @@ export default function App() {
             return <Source {...cSource}>
               <Layer {...matchingLayer} />
             </Source>
-          })}
-          {/* {popupInfo && (
-            <Popup longitude={popupInfo.lngLat.lng} latitude={popupInfo.lngLat.lat}
-              anchor="bottom"
-              onClose={() => setPopupInfo(null)}
-            >
-            <b> 2017</b> <br />
-            <span dangerouslySetInnerHTML={{__html: popupInfo.feature.key}} /> : 
-            {popupInfo.feature.value}
-            </Popup>)
-          } */}
-          
+          })}          
           </Map>
         }
-        <ControlPanel
-          compareMode={compareMode}
-          onCompareChange={setCompareMode}
-          layers={layers}
-          setLayers={setLayers}
-          compareMapLayers={layers2017}
-          setCompareMapLayers={setLayers2017}
-          lang={langToUse}
-          setViewState={setViewState}
-        />
-
     </MapProvider>
   );
 }

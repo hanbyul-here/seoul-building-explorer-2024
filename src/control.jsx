@@ -1,41 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useMap } from 'react-map-gl/maplibre';
-// I had to install events package to use maplibre-gl-compare
-import * as MaplibreglCompare from "@maplibre/maplibre-gl-compare";
-import "@maplibre/maplibre-gl-compare/dist/maplibre-gl-compare.css";
-import { virdisColors, expressionConditions, completeColorExpression, nullKeyExpression, missingColor, extrudedHeightValue } from './constants';
-import { getAllUpdatedColorLayers, getAllUpdatedHeightLayers } from './style'
+import React, { useState } from 'react';
 
-export function CompareControl ({compareMode, onChange, customMapLayers, setLayers, lang }) {
-  const maps = useMap()
-  const map2023 = maps['map-2023']
-  const map2017 = maps['map-2017']
-  useEffect(() => {
-    if (compareMode && map2017 && map2023) {
-      const compareControl = new MaplibreglCompare(map2017, map2023, "#wrapper", {
-        orientation: 'vertical',
-        mousemove: false
-      });
-      const newLayer = getAllUpdatedHeightLayers(0, customMapLayers);
-      setLayers(newLayer);
-      return () => {
-        compareControl.remove();
-      };
-    } else {
-        if (map2023) {
-          const newLayer = getAllUpdatedHeightLayers(extrudedHeightValue, customMapLayers);
-          setLayers(newLayer);
-        }
-    }
-  }, [compareMode, maps])
+import { virdisColors, expressionConditions, completeColorExpression, nullKeyExpression, missingColor } from './constants';
+import { getAllUpdatedColorLayers } from './style'
+import useMakeControl from './make-control'
+import useMapCompare from './use-map-compare';
 
-  function onClick () {
-    onChange(!compareMode)
-  }
-
+export function CompareControl ({ compareMode, onChange, lang }) {
   return (
     <label className="switch">
-      <input type="checkbox" onChange={onClick} checked={compareMode} />
+      <input type="checkbox" onChange={onChange} value={compareMode} />
       <span dangerouslySetInnerHTML={{__html: lang['compare']}} className="slider" />
     </label>
   )
@@ -77,13 +50,23 @@ export function YearControl ({ customMapLayers, setLayers, compareMapLayers, set
   )
 }
 
-export function ControlPanel({onCompareChange, compareMode, layers, setLayers, compareMapLayers, setCompareMapLayers, lang }) {
-  return (
-    <div id="control">
-      <h1>{lang['title']}</h1>
-      <p className="description" dangerouslySetInnerHTML={{ __html:lang['description']}} />
-      <YearControl customMapLayers={layers} setLayers = {setLayers} compareMapLayers={compareMapLayers} setCompareMapLayers = {setCompareMapLayers} lang={lang} />
-      <CompareControl onChange={onCompareChange} compareMode={compareMode} customMapLayers={layers} setLayers = {setLayers} compareMapLayers={compareMapLayers} setCompareMapLayers={setCompareMapLayers} lang={lang} />
-    </div>
-  )
+export function ControlPanel({onCompareChange, compareMode, layers, setLayers, compareMapLayers, setCompareMapLayers, lang, ...rest }) {
+  useMapCompare();
+  
+  useMakeControl(() => {
+    return (
+      <div id="control">
+        <h1>{lang['title']}</h1>
+        <p className="description" dangerouslySetInnerHTML={{ __html:lang['description']}} />
+        <YearControl customMapLayers={layers} setLayers = {setLayers} compareMapLayers={compareMapLayers} setCompareMapLayers = {setCompareMapLayers} lang={lang} />
+        <CompareControl 
+          onChange={onCompareChange} 
+          compareMode={compareMode} 
+          customMapLayers={layers} 
+          setLayers = {setLayers} 
+          compareMapLayers={compareMapLayers} 
+          setCompareMapLayers={setCompareMapLayers} 
+          lang={lang} />
+    </div>)}, 
+    {...rest})
 }
