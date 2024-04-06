@@ -20,7 +20,6 @@ export default function GeocoderControl(props) {
                 `https://api.geocode.earth/v1/autocomplete?text=${cfg.query}&focus.point.lat=37.57490594749267&focus.point.lon=126.97608590126039&api_key=ge-5c11caa6fac22390`
               );
               const responseJson = await response.json()
-                console.log(responseJson)
 
               features = responseJson.features.map((f) => ({
                 type: 'Feature',
@@ -44,6 +43,7 @@ export default function GeocoderControl(props) {
           showResultMarkers: false,
           marker: false,
           flyTo: true,
+          clearOnBlur: true,
           collapsed: true,
           render: (json) => {
             return `<strong>${json.place_name}</strong><br><span>${json.text}</span>`;

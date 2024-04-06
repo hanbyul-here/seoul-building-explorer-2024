@@ -21,11 +21,17 @@ const MAP_CONTAINER_STYLE = {
 }
 
 function formatTooltipText(string, langToUse) {
-  if (!string || !string.length || string == 0) return langToUse['undefined']
-  if (string[4] == 0 && string[6] == 0 ) return string[0] + string[1] + string[2] + string[3] + langToUse['yearFormat']+ string[5] +langToUse['monthFormat'] + string[7] + langToUse['dayFormat'];
-  if (string[4] != 0 && string[6] == 0 ) return string[0] + string[1] + string[2] + string[3] + langToUse['yearFormat'] + string[4] + string[5] +langToUse['monthFormat'] + string[7] + langToUse['dayFormat'];
-  else if (string[4] == 0 && string[6] != 0 ) return string[0] + string[1] + string[2] + string[3] + langToUse['yearFormat']+  string[5] +langToUse['monthFormat'] + string[6] + string[7] + langToUse['dayFormat'];
-  else return string[0] + string[1] + string[2] + string[3] + langToUse['yearFormat']+ string[4] + string[5] +langToUse['monthFormat'] + string[6] + string[7] + langToUse['dayFormat'];
+  if (!string || !string.length || string === '0') return langToUse['undefined'];
+
+  // Extracting year, month, and day from the string
+  const year = string.slice(0, 4);
+  const month = string[4] === '0' ? string[5] : string.slice(4, 6);
+  const day = string[6] === '0' ? string[7] : string.slice(6);
+
+  const formattedMonth = month.length? `${month}${langToUse['monthFormat']}`: ''
+  const formattedDay = day.length? `${day}${langToUse['dayFormat']}`: ''
+
+  return `${year}${langToUse['yearFormat']}${formattedMonth}${formattedDay}`;
 }
 
 export default function App() {
@@ -136,12 +142,12 @@ export default function App() {
             anchor="bottom"
             onClose={() => setPopupInfo(null)}
           >
-            <strong> 2023 </strong>
+            {compareMode && <strong> 2023 </strong>}
             {popupInfo.features.map(f => {
               return (
                 <div key={f.key}>
                   <strong>{f.key}: </strong>
-                  <span>{f.value}</span>
+                  <span>{!!f.value? f.value: langToUse['undefined']}</span>
                 </div>
               )
             })}

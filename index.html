@@ -37,6 +37,7 @@
         padding: 10px;
         width: 400px;
         font-size: 12px;
+        z-index: 5;
       }
       h1 {
         font-size: 16px;
@@ -70,6 +71,23 @@
         right: -30px;
         text-shadow: 2px 2px 2px grey;
       }
+      .blocks {
+          margin-bottom: 5px;
+        }
+      .switch {
+          display: flex;
+          align-items: center;
+          cursor: pointer;;
+        }
+      .switch input {
+        width: 18px;
+        height: 18px;
+      }
+      .switch-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
       @media all and (max-width: 600px) {
         #control {
           top: 5px;
@@ -78,12 +96,22 @@
           padding: 10px;
         }
         .maplibregl-ctrl-top-left {
-          top: 180px;
+          top: 200px;
           left: 5px;
         }
         .mapboxgl-ctrl-geocoder.maplibregl-ctrl-geocoder {
           margin: 0;
         }
+        .description { 
+          margin: 5px 0;
+        }
+        .colorblock {
+          padding: 8px 0;
+        }
+        .show-all {
+          height: 30px;
+        }
+
       }
       
   </style>

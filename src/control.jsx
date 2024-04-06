@@ -34,10 +34,13 @@ export function CompareControl ({compareMode, onChange, customMapLayers, setLaye
   }
 
   return (
+    <div className="switch-wrapper">
     <label className="switch">
       <input type="checkbox" onChange={onClick} checked={compareMode} />
       <span dangerouslySetInnerHTML={{__html: lang['compare']}} className="slider" />
     </label>
+    <div dangerouslySetInnerHTML={{__html: lang['linkTo2017']}} />
+    </div>
   )
 }
 
@@ -66,7 +69,7 @@ export function YearControl ({ customMapLayers, setLayers, compareMapLayers, set
   }
 
   return (
-    <div>
+    <div className='blocks'>
       {virdisColors.map((color, idx) => {
         const style = (selectedIdx!== null)? idx === selectedIdx? {backgroundColor: color} : {backgroundColor: 'grey'}: {backgroundColor: color};
         return <button className="colorblock" key={color} onClick={() => {onClick(idx)}} style ={style}> {1920 + idx * 10} </button>
