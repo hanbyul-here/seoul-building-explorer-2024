@@ -5,11 +5,11 @@ import { getAllUpdatedColorLayers } from './style'
 import useMakeControl from './make-control'
 import useMapCompare from './use-map-compare';
 
-export function CompareControl ({ compareMode, onChange, lang }) {
+export function CompareControl ({ compareMode, onChange, lang, disabled }) {
   return (
     <div className="switch-wrapper">
     <label className="switch">
-      <input type="checkbox" onChange={onChange} value={compareMode} />
+      <input type="checkbox" onChange={onChange} disabled={disabled} defaultChecked={compareMode} />
       <span dangerouslySetInnerHTML={{__html: lang['compare']}} className="slider" />
     </label>
     <div dangerouslySetInnerHTML={{__html: lang['linkTo2017']}} />
@@ -17,7 +17,7 @@ export function CompareControl ({ compareMode, onChange, lang }) {
   )
 }
 
-export function YearControl ({ customMapLayers, setLayers, compareMapLayers, setCompareMapLayers, lang }) {
+export function YearControl ({ customMapLayers, disabled, setLayers, compareMapLayers, setCompareMapLayers, lang }) {
   const [selectedIdx, setSelectedIdx] = useState(null)
 
   // Show All
@@ -44,10 +44,10 @@ export function YearControl ({ customMapLayers, setLayers, compareMapLayers, set
   return (
     <div className='blocks'>
       {virdisColors.map((color, idx) => {
-        const style = (selectedIdx!== null)? idx === selectedIdx? {backgroundColor: color} : {backgroundColor: 'grey'}: {backgroundColor: color};
-        return <button className="colorblock" key={color} onClick={() => {onClick(idx)}} style ={style}> {1920 + idx * 10} </button>
+        const style = disabled? {backgroundColor: 'grey', color: 'darkgrey'}:(selectedIdx!== null)? idx === selectedIdx? {backgroundColor: color} : {backgroundColor: 'grey'}: {backgroundColor: color};
+        return <button disabled={disabled} className="colorblock" key={color} onClick={() => {onClick(idx)}} style ={style}> {1920 + idx * 10} </button>
       })}
-      <button className="show-all" onClick={() => {onClick(null)}}> {lang['show']} </button>
+      <button disabled={disabled} className="show-all" onClick={() => {onClick(null)}}> {lang['show']} </button>
     </div>
     
   )
@@ -55,21 +55,37 @@ export function YearControl ({ customMapLayers, setLayers, compareMapLayers, set
 
 export function ControlPanel({onCompareChange, compareMode, layers, setLayers, compareMapLayers, setCompareMapLayers, lang, ...rest }) {
   useMapCompare();
-  
   useMakeControl(() => {
     return (
       <div id="control">
         <h1>{lang['title']}</h1>
         <p className="description" dangerouslySetInnerHTML={{ __html:lang['description']}} />
-        <YearControl customMapLayers={layers} setLayers = {setLayers} compareMapLayers={compareMapLayers} setCompareMapLayers = {setCompareMapLayers} lang={lang} />
+        <YearControl customMapLayers={layers} setLayers = {setLayers} compareMapLayers={compareMapLayers} setCompareMapLayers = {setCompareMapLayers} disabled={false} lang={lang} />
         <CompareControl 
           onChange={onCompareChange} 
           compareMode={compareMode} 
-          customMapLayers={layers} 
-          setLayers = {setLayers} 
-          compareMapLayers={compareMapLayers} 
-          setCompareMapLayers={setCompareMapLayers} 
-          lang={lang} />
+          lang={lang} 
+          disabled={false}
+          />
     </div>)}, 
-    {...rest})
+    {...rest}
+  )
+}
+
+export function ControlPanelLook(props) {
+  const {onCompareChange, compareMode, layers, setLayers, compareMapLayers, setCompareMapLayers, lang, ...rest } = props;
+  useMakeControl(() => {
+    return (
+      <div id="control">
+        <h1>{lang['title']}</h1>
+        <p className="description" dangerouslySetInnerHTML={{ __html:lang['description']}} />
+        <YearControl customMapLayers={layers} setLayers = {setLayers} compareMapLayers={compareMapLayers} setCompareMapLayers = {setCompareMapLayers} lang={lang}  disabled={true} />
+        <CompareControl 
+          onChange={onCompareChange} 
+          compareMode={true} 
+          lang={lang}
+          disabled={true}
+           />
+    </div>)}, 
+    {...rest});
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import * as pmtiles from 'pmtiles';
 import * as maplibregl from 'maplibre-gl';
 import { MapProvider, Map, Source, Layer, Popup, NavigationControl, GeolocateControl, AttributionControl } from 'react-map-gl/maplibre';
-import { ControlPanel } from './control'
+import { ControlPanel, ControlPanelLook } from './control'
 import GeocoderControl from './geocoder';
 import { baseMapStyle, sourcesArr2017, sourcesArr2023, getLayers, getAllUpdatedHeightLayers } from './style';
 import { LanguageEng, LanguageKr } from './lang'
@@ -20,6 +20,8 @@ const MAP_CONTAINER_STYLE = {
   width: '100%',
   height: '100%'
 }
+
+const keyOrder = ['법정동','번지','건물이름','사용승인일자'];
 
 function formatTooltipText(string, langToUse) {
   if (!string || !string.length || string === '0') return langToUse['undefined'];
@@ -86,9 +88,6 @@ export default function App() {
       const dongKeyVal = isEng? `${langToUse['averageYear']} of ${langToUse['dong']}` : `${langToUse['averageYear']}`
 
       let fs = [{
-        key: viewState.zoom < 13 ?  dongKeyVal : langToUse['date'],
-        value:  viewState.zoom < 13 ?   Math.round(fp.APR_Y) : formatTooltipText(fp.USEAPR_DAY, langToUse)
-      }, {
         key: langToUse['dong'],
         value: viewState.zoom < 13 ? fp.EMD_NM: fp.DONG
       }]
@@ -98,10 +97,16 @@ export default function App() {
           key: langToUse['address'],
           value: fp.BEONJI? `${parseInt(fp.BEONJI.slice(0,4))}-${parseInt(fp.BEONJI.slice(4,8))}번지`:''
         },{
-          key: langToUse['bname'],
+          key: langToUse[
+            'bname'],
           value: fp.BLD_NM
         } ]
       }
+      fs = [...fs,
+        {
+          key: viewState.zoom < 13 ?  dongKeyVal : langToUse['date'],
+          value:  viewState.zoom < 13 ?   Math.round(fp.APR_Y) : formatTooltipText(fp.USEAPR_DAY, langToUse)
+        }]
       setPopupInfo({
         lngLat: evt.lngLat,
         features: fs
@@ -133,6 +138,7 @@ export default function App() {
         onClick={onClick}
         maxBounds={[126.684927,37.423433,127.261022,37.702655]}
         interactiveLayerIds={interactiveLayerIds}
+        doubleClickZoom={false}
         hash
       >
         {sourcesArr2023.map (cSource => {
@@ -147,7 +153,8 @@ export default function App() {
             onClose={() => setPopupInfo(null)}
           >
             {compareMode && <strong> 2023 </strong>}
-            {popupInfo.features.map(f => {
+            {popupInfo.features
+            .map(f => {
               return (
                 <div key={f.key}>
                   <strong>{f.key}: </strong>
@@ -174,7 +181,7 @@ export default function App() {
           <AttributionControl customAttribution={"Map data from <a href='https://openstreetmap.org/'>OpenStreetMap</a> | <a href='https://www.vworld.kr/dtmk/dtmk_ntads_s002.do?dsId=30524'>VWorld</a>"} 
           compact={true}
           position="bottom-right" />
-        <NavigationControl position="bottom-right" />
+        <NavigationControl showCompass={false} position="bottom-right" />
         <GeolocateControl position="bottom-right" 
           positionOptions={{
             enableHighAccuracy: true
@@ -197,7 +204,18 @@ export default function App() {
             return <Source {...cSource}>
               <Layer {...matchingLayer} />
             </Source>
-          })}          
+          })}
+        <ControlPanelLook
+          compareMode={compareMode}
+          onCompareChange={onCompareChange}
+          layers={layers}
+          setLayers={setLayers}
+          compareMapLayers={layers2017}
+          setCompareMapLayers={setLayers2017}
+          lang={langToUse}
+          setViewState={setViewState}
+          position="top-right"
+        />
           </Map>
         }
     </MapProvider>
