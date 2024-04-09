@@ -40,7 +40,7 @@ export default function GeocoderControl(props) {
         },
         {
           showResultsWhileTyping: true,
-          showResultMarkers: false,
+          showResultMarkers: true,
           marker: false,
           flyTo: true,
           clearOnBlur: true,

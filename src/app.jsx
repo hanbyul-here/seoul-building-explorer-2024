@@ -21,8 +21,6 @@ const MAP_CONTAINER_STYLE = {
   height: '100%'
 }
 
-const keyOrder = ['법정동','번지','건물이름','사용승인일자'];
-
 function formatTooltipText(string, langToUse) {
   if (!string || !string.length || string === '0') return langToUse['undefined'];
 
@@ -213,7 +211,6 @@ export default function App() {
           compareMapLayers={layers2017}
           setCompareMapLayers={setLayers2017}
           lang={langToUse}
-          setViewState={setViewState}
           position="top-right"
         />
           </Map>
