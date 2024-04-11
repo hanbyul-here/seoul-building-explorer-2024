@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useCallback } from 'react'
+import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react'
 import * as pmtiles from 'pmtiles';
 import * as maplibregl from 'maplibre-gl';
 import { MapProvider, Map, Source, Layer, Popup, NavigationControl, GeolocateControl, AttributionControl } from 'react-map-gl/maplibre';
@@ -39,7 +39,9 @@ export default function App() {
   const [layers, setLayers] = useState(getLayers(2023))
   const [layers2017, setLayers2017] = useState(getLayers(2017))
   const [popupInfo, setPopupInfo] = useState(null);
-  const [compareMode, setCompareMode] = useState(false)
+  const [compareMode, setCompareMode] = useState(false);
+  const geoControlRef = useRef();
+
   const searchParams = new URLSearchParams(document.location.search)
   
   const isEng = searchParams.get('lang')?.includes('en')
@@ -74,6 +76,11 @@ export default function App() {
       maplibregl.removeProtocol('pmtiles')
     }
   },[])
+
+  // Activate as soon as the control is loaded
+  useEffect(() => {
+    geoControlRef.current?.trigger();
+  }, [geoControlRef.current]);
 
   const interactiveLayerIds = useMemo(() => {
     return layers.map(l => l.id)
@@ -184,8 +191,10 @@ export default function App() {
           positionOptions={{
             enableHighAccuracy: true
           }}
+          ref={geoControlRef}
           trackUserLocation={true}
-          onError = {() => {console.log('error')}}
+          showUserLocation={true}
+          onError = {() => {window.popup(lang['locateError'])}}
         />
       </Map>
       {compareMode &&
