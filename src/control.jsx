@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 
-import { virdisColors, expressionConditions, completeColorExpression, nullKeyExpression, missingColor } from './constants';
+import { baseYear, virdisColors, expressionConditions, completeColorExpression, nullKeyExpression, missingColor } from './constants';
 import { getAllUpdatedColorLayers } from './style'
 import useMakeControl from './make-control'
 import useMapCompare from './use-map-compare';
+
 
 export function CompareControl ({ compareMode, onChange, lang, disabled }) {
   return (
@@ -45,7 +46,7 @@ export function YearControl ({ customMapLayers, disabled, setLayers, compareMapL
     <div className='blocks'>
       {virdisColors.map((color, idx) => {
         const style = disabled? {backgroundColor: 'grey', color: 'darkgrey'}:(selectedIdx!== null)? idx === selectedIdx? {backgroundColor: color} : {backgroundColor: 'grey'}: {backgroundColor: color};
-        return <button disabled={disabled} className="colorblock" key={color} onClick={() => {onClick(idx)}} style ={style}> {1920 + idx * 10} </button>
+        return <button disabled={disabled} className="colorblock" key={color} onClick={() => {onClick(idx)}} style ={style}> {baseYear + idx * 10} </button>
       })}
       <button disabled={disabled} className="show-all" onClick={() => {onClick(null)}}> {lang['show']} </button>
     </div>

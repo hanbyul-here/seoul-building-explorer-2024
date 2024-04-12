@@ -1,3 +1,4 @@
+export const baseYear = 1930;
 export const virdisColors = ['#b0dd2f', '#70cf57','#3dbc74','#21a585','#218e8d','#2a768e','#355e8d','#414287','#482475',
 '#440154']
 
@@ -5,16 +6,16 @@ export const missingColor = '#666'
 
 export function expressionConditions(key) {
   return [
-  ['all', ['>=', ['get', key], 1000], ['<', ['get', key], 1930]],
-  ['all', ['>=', ['get', key], 1930], ['<', ['get', key], 1940]],
-  ['all', ['>=', ['get', key], 1940], ['<', ['get', key], 1950]],
-  ['all', ['>=', ['get', key], 1950], ['<', ['get', key], 1960]],
-  ['all', ['>=', ['get', key], 1960], ['<', ['get', key], 1970]],
-  ['all', ['>=', ['get', key], 1970], ['<', ['get', key], 1980]],
-  ['all', ['>=', ['get', key], 1980], ['<', ['get', key], 1990]],
-  ['all', ['>=', ['get', key], 1990], ['<', ['get', key], 2000]],
-  ['all', ['>=', ['get', key], 2000], ['<', ['get', key], 2010]],
-  ['all', ['>=', ['get', key], 2010]]]
+  ['all', ['>=', ['get', key], 1000], ['<', ['get', key], baseYear + 10]],
+  ['all', ['>=', ['get', key],  baseYear + 10], ['<', ['get', key],  baseYear + 20]],
+  ['all', ['>=', ['get', key],  baseYear + 20], ['<', ['get', key],  baseYear + 30]],
+  ['all', ['>=', ['get', key],  baseYear + 30], ['<', ['get', key],  baseYear + 40]],
+  ['all', ['>=', ['get', key],  baseYear + 40], ['<', ['get', key],  baseYear + 50]],
+  ['all', ['>=', ['get', key],  baseYear + 50], ['<', ['get', key],  baseYear + 60]],
+  ['all', ['>=', ['get', key],  baseYear + 60], ['<', ['get', key],  baseYear + 70]],
+  ['all', ['>=', ['get', key],  baseYear + 70], ['<', ['get', key],  baseYear + 80]],
+  ['all', ['>=', ['get', key],  baseYear + 80], ['<', ['get', key],  baseYear + 90]],
+  ['all', ['>=', ['get', key],  baseYear + 90]]]
 }
 
 export function fillExtrucionColorConditions(key) {
@@ -42,3 +43,4 @@ export const extrudedHeightValue = [
   14, 0,
   15.05, ["get", "HEIGHT"]
 ]
+
