@@ -40,7 +40,6 @@ export default function App() {
   const [layers2017, setLayers2017] = useState(getLayers(2017))
   const [popupInfo, setPopupInfo] = useState(null);
   const [compareMode, setCompareMode] = useState(false);
-  const geoControlRef = useRef();
 
   const searchParams = new URLSearchParams(document.location.search)
   
@@ -76,11 +75,6 @@ export default function App() {
       maplibregl.removeProtocol('pmtiles')
     }
   },[])
-
-  // Activate as soon as the control is loaded
-  useEffect(() => {
-    geoControlRef.current?.trigger();
-  }, [geoControlRef.current]);
 
   const interactiveLayerIds = useMemo(() => {
     return layers.map(l => l.id)
@@ -187,11 +181,11 @@ export default function App() {
           compact={true}
           position="bottom-right" />
         <NavigationControl showCompass={false} position="bottom-right" />
-        <GeolocateControl position="bottom-right" 
+        <GeolocateControl 
+          position="bottom-right" 
           positionOptions={{
             enableHighAccuracy: true
           }}
-          ref={geoControlRef}
           trackUserLocation={true}
           showUserLocation={true}
           onError = {() => {window.popup(lang['locateError'])}}
