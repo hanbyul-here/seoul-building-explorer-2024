@@ -40,6 +40,7 @@ export default function App() {
   const [layers2017, setLayers2017] = useState(getLayers(2017))
   const [popupInfo, setPopupInfo] = useState(null);
   const [compareMode, setCompareMode] = useState(false);
+  const [showDetail, setShowDetail] = useState(true);
 
   const searchParams = new URLSearchParams(document.location.search)
   
@@ -119,6 +120,10 @@ export default function App() {
     setCompareMode(prev => !prev);
   }
 
+  function onDetailChage() {
+    setShowDetail(prev => !prev);
+  }
+
   const newLayers = compareMode? getAllUpdatedHeightLayers(0, layers): getAllUpdatedHeightLayers(extrudedHeightValue, layers);
 
   return (
@@ -173,6 +178,8 @@ export default function App() {
           setCompareMapLayers={setLayers2017}
           lang={langToUse}
           setViewState={setViewState}
+          showDetail={showDetail}
+          setShowDetail={onDetailChage}
           position="top-right"
         />
         <GeocoderControl position="top-right" />
@@ -214,6 +221,8 @@ export default function App() {
           compareMapLayers={layers2017}
           setCompareMapLayers={setLayers2017}
           lang={langToUse}
+          showDetail={showDetail}
+          setShowDetail={onDetailChage}
           position="top-right"
         />
           </Map>

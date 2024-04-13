@@ -54,13 +54,25 @@ export function YearControl ({ customMapLayers, disabled, setLayers, compareMapL
   )
 }
 
-export function ControlPanel({onCompareChange, compareMode, layers, setLayers, compareMapLayers, setCompareMapLayers, lang, ...rest }) {
+function Explainer({showDetail, setShowDetail, lang, disabled}) {
+  return (
+    <>
+    <div style={{display: 'flex','justifyContent':'space-between'}}>
+      <h1>{lang['title']}</h1> 
+      <button disabled={disabled} className="mobile sub-button" onClick={setShowDetail}> {showDetail?'설명접기':'설명보기'}</button>
+    </div>
+    {showDetail&& <p className="description" dangerouslySetInnerHTML={{ __html:lang['description']}} />}
+    </>
+
+  )
+}
+
+export function ControlPanel({onCompareChange, compareMode, layers, setLayers, compareMapLayers, setCompareMapLayers, lang, showDetail, setShowDetail, ...rest }) {
   useMapCompare();
   useMakeControl(() => {
     return (
       <div id="control">
-        <h1>{lang['title']}</h1>
-        <p className="description" dangerouslySetInnerHTML={{ __html:lang['description']}} />
+        <Explainer lang={lang} showDetail={showDetail} setShowDetail={setShowDetail} disabled={false} />
         <YearControl customMapLayers={layers} setLayers = {setLayers} compareMapLayers={compareMapLayers} setCompareMapLayers = {setCompareMapLayers} disabled={false} lang={lang} />
         <CompareControl 
           onChange={onCompareChange} 
@@ -74,12 +86,11 @@ export function ControlPanel({onCompareChange, compareMode, layers, setLayers, c
 }
 
 export function ControlPanelLook(props) {
-  const {onCompareChange, compareMode, layers, setLayers, compareMapLayers, setCompareMapLayers, lang, ...rest } = props;
+  const {onCompareChange, compareMode, layers, setLayers, compareMapLayers, setCompareMapLayers, lang, showDetail, setShowDetail, ...rest } = props;
   useMakeControl(() => {
     return (
       <div id="control">
-        <h1>{lang['title']}</h1>
-        <p className="description" dangerouslySetInnerHTML={{ __html:lang['description']}} />
+        <Explainer lang={lang} showDetail={showDetail} setShowDetail={setShowDetail} disabled={true} />
         <YearControl customMapLayers={layers} setLayers = {setLayers} compareMapLayers={compareMapLayers} setCompareMapLayers = {setCompareMapLayers} lang={lang}  disabled={true} />
         <CompareControl 
           onChange={onCompareChange} 
