@@ -54,23 +54,11 @@ export default function App() {
     bearint: 0,
     pitch: INITIAL_VIEW_STATE.pitch
   });
+
   // Attach pmtile protocol to MapLibre
   useEffect(() => {
     const protocol = new pmtiles.Protocol()
     maplibregl.addProtocol('pmtiles', protocol.tile)
-
-    // When map gets the first view state with hash value, compare map doesn't get the updated value
-    // Therefore we set the viewState with the hash value on landing
-    const hashValue = window.location.hash.substring(1);
-    const parts = hashValue.split('/');
-
-    setViewState({
-      longitude: parts[2],
-      latitude: parts[1],
-      zoom: parts[0],
-      bearing: parts[3],
-      pitch: parts[4]
-    })
 
     return () => {
       maplibregl.removeProtocol('pmtiles')
