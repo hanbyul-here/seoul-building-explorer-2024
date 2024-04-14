@@ -92,10 +92,11 @@ export default function App() {
         value: viewState.zoom < 13 ? fp.EMD_NM: fp.DONG
       }]
       if (viewState.zoom >= 15) {
+        const sub = parseInt(fp.BEONJI.slice(4,8));
         fs = [...fs, 
           {
           key: langToUse['address'],
-          value: fp.BEONJI? `${parseInt(fp.BEONJI.slice(0,4))}-${parseInt(fp.BEONJI.slice(4,8))}번지`:''
+          value: (fp.BEONJI && !!sub)? `${parseInt(fp.BEONJI.slice(0,4))}-${parseInt(fp.BEONJI.slice(4,8))}번지`: fp.BEONJI? `${parseInt(fp.BEONJI.slice(0,4))}번지`: ''
         },{
           key: langToUse[
             'bname'],
@@ -198,7 +199,7 @@ export default function App() {
           onError = {() => {window.popup(lang['locateError'])}}
         />
       </Map>
-      {compareMode &&
+        {compareMode &&
           <Map
             id="map-2017" 
             initialViewState={viewState}
@@ -227,6 +228,7 @@ export default function App() {
         />
           </Map>
         }
+      
     </MapProvider>
   );
 }

@@ -41,7 +41,7 @@ export default function GeocoderControl(props) {
         {
           showResultsWhileTyping: true,
           showResultMarkers: true,
-          marker: false,
+          marker: true,
           flyTo: true,
           clearOnBlur: true,
           collapsed: true,
