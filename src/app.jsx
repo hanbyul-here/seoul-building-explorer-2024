@@ -92,7 +92,7 @@ export default function App() {
         value: viewState.zoom < 13 ? fp.EMD_NM: fp.DONG
       }]
       if (viewState.zoom >= 15) {
-        const sub = parseInt(fp.BEONJI.slice(4,8));
+        const sub = fp.BEONJI? parseInt(fp.BEONJI.slice(4,8)) : null;
         fs = [...fs, 
           {
           key: langToUse['address'],
