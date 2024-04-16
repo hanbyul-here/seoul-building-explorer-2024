@@ -23,12 +23,10 @@ export default function GeocoderControl(props) {
 
               features = responseJson.features.map((f) => ({
                 type: 'Feature',
-                geometry: {
-                  ...f.geometry
-                },
+                geometry: f.geometry,
                 place_type: f.properties.layer,
                 properties: f.properties,
-                text: `${f.properties.neighbourhood} ${f.properties.locality}`,
+                text: f.properties.neighbourhood && f.properties.locality ? `${f.properties.neighbourhood} ${f.properties.locality}`: f.properties.locality? `${f.properties.locality} ${f.properties.name}` : f.properties.name, 
                 place_name: f.properties.name,
                 center: f.geometry.coordinates
               }));
