@@ -133,8 +133,10 @@ export function getLayers(year) {
       // Give #666 to null value
       ["case", ["==", ["get", keyWord], null], '#666',
         ['case',...fillExtrucionColorConditions(keyWord), 'red']]
-    }
+    },
+    beforeId: 'places_subplace'
   }]
+    
 
 }
 
