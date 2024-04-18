@@ -20,13 +20,12 @@ export default function GeocoderControl(props) {
                 `https://api.geocode.earth/v1/autocomplete?text=${cfg.query}&focus.point.lat=37.57490594749267&focus.point.lon=126.97608590126039&api_key=${import.meta.env.VITE_GE_KEY}`
               );
               const responseJson = await response.json()
-
               features = responseJson.features.map((f) => ({
                 type: 'Feature',
                 geometry: f.geometry,
                 place_type: f.properties.layer,
                 properties: f.properties,
-                text: f.properties.neighbourhood && f.properties.locality ? `${f.properties.neighbourhood} ${f.properties.locality}`: f.properties.locality? `${f.properties.locality} ${f.properties.name}` : f.properties.name, 
+                text: f.properties.name, 
                 place_name: f.properties.name,
                 center: f.geometry.coordinates
               }));
