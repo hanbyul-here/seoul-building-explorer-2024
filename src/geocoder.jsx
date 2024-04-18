@@ -17,7 +17,7 @@ export default function GeocoderControl(props) {
             let features = [];
             try {
               const response = await fetch(
-                `https://api.geocode.earth/v1/autocomplete?text=${cfg.query}&focus.point.lat=37.57490594749267&focus.point.lon=126.97608590126039&api_key=ge-5c11caa6fac22390`
+                `https://api.geocode.earth/v1/autocomplete?text=${cfg.query}&focus.point.lat=37.57490594749267&focus.point.lon=126.97608590126039&api_key=${import.meta.env.VITE_GE_KEY}`
               );
               const responseJson = await response.json()
 

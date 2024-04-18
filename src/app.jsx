@@ -132,7 +132,12 @@ export default function App() {
         maxBounds={[126.684927,37.423433,127.261022,37.702655]}
         interactiveLayerIds={interactiveLayerIds}
         doubleClickZoom={false}
-        hash
+        // @TECH_DEBT : There is a bug that map doesn't fill up the height
+        // Resize the map on load to make sure the map stretches properly
+        onLoad={(event) => {
+          event.target.resize() 
+        }}
+        hash={true}
       >
         {sourcesArr2023.map (cSource => {
           const matchingLayer = newLayers.find(l => l.source === cSource.key);

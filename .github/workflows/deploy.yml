@@ -38,6 +38,8 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build
+        env:
+          VITE_GE_KEY: ${{ secrets.VITE_GE_KEY }}
         run: npm run build
       - name: Setup Pages
         uses: actions/configure-pages@v3
