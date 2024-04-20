@@ -7,6 +7,7 @@ import GeocoderControl from './geocoder';
 import { baseMapStyle, sourcesArr2017, sourcesArr2023, getLayers, getAllUpdatedHeightLayers } from './style';
 import { LanguageEng, LanguageKr } from './lang'
 import { extrudedHeightValue } from './constants';
+import './app.css'
 
 const INITIAL_VIEW_STATE = {
   center: [126.9761,37.5749],
