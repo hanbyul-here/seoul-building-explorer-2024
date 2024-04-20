@@ -104,6 +104,7 @@ export default function App() {
 
     if (evt.features?.length && evt.features[0].properties) {
       const fp = evt.features[0].properties
+
       const keySets = (viewState.zoom >=15)? highZoomPopupDisplayKey: lowZoomPopupDisplayKey
         const fs = Object.keys(keySets)
         .reduce((acc, curr) => {

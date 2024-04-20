@@ -26,7 +26,7 @@ export function YearControl ({ customMapLayers, disabled, setLayers, compareMapL
     if (idx === null) { 
       setSelectedIdx(null)
       const newLayer = getAllUpdatedColorLayers(completeColorExpression('APR_Y'), customMapLayers);
-      const newLayer2017 = getAllUpdatedColorLayers(completeColorExpression('Year'), compareMapLayers);
+      const newLayer2017 = getAllUpdatedColorLayers(completeColorExpression('APR_Y'), compareMapLayers);
       
       setLayers(newLayer)
       setCompareMapLayers(newLayer2017)
@@ -35,7 +35,7 @@ export function YearControl ({ customMapLayers, disabled, setLayers, compareMapL
       setSelectedIdx(idx);
 
       const newLayer = getAllUpdatedColorLayers(["case", nullKeyExpression('APR_Y'), missingColor,['case', expressionConditions('APR_Y')[idx], virdisColors[idx],  missingColor]], customMapLayers);
-      const newLayer2017 = getAllUpdatedColorLayers(["case", nullKeyExpression('Year'), missingColor,['case', expressionConditions('Year')[idx], virdisColors[idx],  missingColor]], compareMapLayers);
+      const newLayer2017 = getAllUpdatedColorLayers(["case", nullKeyExpression('APR_Y'), missingColor,['case', expressionConditions('APR_Y')[idx], virdisColors[idx],  missingColor]], compareMapLayers);
 
       setLayers(newLayer);
       setCompareMapLayers(newLayer2017)

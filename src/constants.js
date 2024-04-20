@@ -35,7 +35,7 @@ export function completeColorExpression(key) {
 export const notVisibleLayerKeyWords = ["transit", "poi", "buildings", 'landuse', 'pois']
 
 export const aprCol2023 = 'APR_Y'
-export const aprCol2017 = 'Year'
+export const aprCol2017 = 'APR_Y'
 
 
 export const extrudedHeightValue = [
