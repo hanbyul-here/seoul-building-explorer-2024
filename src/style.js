@@ -92,7 +92,7 @@ const extrudedStyle = {
 
 export function getLayers(year) {
   const extrusionHeightStyle = year == 2023? extrudedStyle : {};
-  const keyWord = year == 2023? 'APR_Y' : 'Year';
+  const keyWord = 'APR_Y';
   return [
   {
     "id": "bds",

@@ -18,13 +18,12 @@ const MAP_CONTAINER_STYLE = {
   position: 'absolute',
   top: 0,
   bottom: 0,
-  width: '100%',
-  height: '100%'
+  width: '100vw',
+  height: '100vh'
 }
 
 function formatTooltipText(string, langToUse) {
   if (!string || !string.length || string === '0') return langToUse['undefined'];
-
   // Extracting year, month, and day from the string
   const year = string.slice(0, 4);
   const month = string[4] === '0' ? string[5] : string.slice(4, 6);
@@ -34,6 +33,15 @@ function formatTooltipText(string, langToUse) {
   const formattedDay = day.length? `${day}${langToUse['dayFormat']}`: ''
 
   return `${year}${langToUse['yearFormat']}${formattedMonth}${formattedDay}`;
+}
+
+const popupDisplayKey = {
+  'DONG' : 'dong',
+  'EMD_NM' : 'dong',
+  'BEONJI': 'address',
+  'APR_Y': 'averageYear',
+  'USEAPR_DAY': 'date',
+  'BLD_NM': 'bname'
 }
 
 export default function App() {
@@ -69,40 +77,47 @@ export default function App() {
   const interactiveLayerIds = useMemo(() => {
     return layers.map(l => l.id)
   },[])
+  const interactiveLayerIds2017 = useMemo(() => {
+    return layers2017.map(l => l.id)
+  },[])
 
   const onMove = useCallback(evt => { setViewState(evt.viewState)}, []);
   const onClick = useCallback(evt => { 
+    // Do not show popup for circles
+    if (viewState.zoom < 15 && viewState.zoom >=13) {
+      setPopupInfo(null);
+      return
+    }
+
     if (evt.features?.length && evt.features[0].properties ){
       const fp = evt.features[0].properties
-      const dongKeyVal = isEng? `${langToUse['averageYear']} of ${langToUse['dong']}` : `${langToUse['averageYear']}`
-
-      let fs = [{
-        key: langToUse['dong'],
-        value: viewState.zoom < 13 ? fp.EMD_NM: fp.DONG
-      }]
-      if (viewState.zoom >= 15) {
-        const sub = fp.BEONJI? parseInt(fp.BEONJI.slice(4,8)) : null;
-        fs = [...fs, 
-          {
-          key: langToUse['address'],
-          value: (fp.BEONJI && !!sub)? `${parseInt(fp.BEONJI.slice(0,4))}-${parseInt(fp.BEONJI.slice(4,8))}번지`: fp.BEONJI? `${parseInt(fp.BEONJI.slice(0,4))}번지`: ''
-        },{
-          key: langToUse[
-            'bname'],
-          value: fp.BLD_NM
-        } ]
-      }
-      fs = [...fs,
-        {
-          key: viewState.zoom < 13 ?  dongKeyVal : langToUse['date'],
-          value:  viewState.zoom < 13 ?   Math.round(fp.APR_Y) : formatTooltipText(fp.USEAPR_DAY, langToUse)
+      const fs = Object.keys(fp)
+      .filter(key => key !== 'HEIGHT')
+      .filter( key =>  viewState.zoom >=15? key !=='APR_Y': key !=='USEAPR_DAY')
+      .reduce((acc, curr) => {
+        let val = fp[curr]
+        if (curr === 'BEONJI') {
+          const sub = parseInt(fp[curr].slice(4,8));
+          val = (!!sub)? `${parseInt(fp.BEONJI.slice(0,4))}-${parseInt(fp.BEONJI.slice(4,8))}번지`: `${parseInt(fp.BEONJI.slice(0,4))}번지`
+        }
+        if (curr === 'USEAPR_DAY') {
+          val = formatTooltipText(fp[curr], langToUse)
+        }
+        if (curr  === 'APR_Y') {
+          val = fp[curr].toFixed(2)
+        }
+        return [...acc, {
+          key: langToUse[popupDisplayKey[curr]],
+          value: val
         }]
+      }, [])
+
       setPopupInfo({
         lngLat: evt.lngLat,
         features: fs
       });
     }
-
+  
     else setPopupInfo(null)
   }, [viewState.zoom]);
 
@@ -151,7 +166,7 @@ export default function App() {
             anchor="bottom"
             onClose={() => setPopupInfo(null)}
           >
-            {compareMode && <strong> 2023 </strong>}
+            {compareMode && <strong> 2024 </strong>}
             {popupInfo.features
             .map(f => {
               return (
@@ -199,7 +214,10 @@ export default function App() {
             initialViewState={viewState}
             style={MAP_CONTAINER_STYLE}
             mapStyle={baseMapStyle}
+            maxBounds={[126.684927,37.423433,127.261022,37.702655]}
             onClick={onClick}
+            interactiveLayerIds={interactiveLayerIds2017}
+            doubleClickZoom={false}
             styleDiffing
           >
           {sourcesArr2017.map (cSource => {
@@ -208,6 +226,24 @@ export default function App() {
               <Layer {...matchingLayer} />
             </Source>
           })}
+        {popupInfo && (
+          <Popup longitude={popupInfo.lngLat.lng} latitude={popupInfo.lngLat.lat}
+            anchor="bottom"
+            onClose={() => setPopupInfo(null)}
+          >
+            {compareMode && <strong> 2017 </strong>}
+            {popupInfo.features
+            .map(f => {
+              return (
+                <div key={f.key}>
+                  <strong>{f.key}: </strong>
+                  <span>{!!f.value? f.value: langToUse['undefined']}</span>
+                </div>
+              )
+            })}
+
+          </Popup>)
+        }
         <ControlPanelLook
           compareMode={compareMode}
           onCompareChange={onCompareChange}
