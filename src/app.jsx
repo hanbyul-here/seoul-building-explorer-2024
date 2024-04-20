@@ -44,6 +44,19 @@ const popupDisplayKey = {
   'BLD_NM': 'bname'
 }
 
+const highZoomPopupDisplayKey = {
+  'DONG' : 'dong',
+  'BEONJI': 'address',
+  'BLD_NM': 'bname',
+  'USEAPR_DAY': 'date',
+}
+
+const lowZoomPopupDisplayKey = {
+  'EMD_NM' : 'dong',
+  'APR_Y': 'averageYear'
+
+}
+
 export default function App() {
   const [layers, setLayers] = useState(getLayers(2023))
   const [layers2017, setLayers2017] = useState(getLayers(2017))
@@ -89,36 +102,38 @@ export default function App() {
       return
     }
 
-    if (evt.features?.length && evt.features[0].properties ){
+    if (evt.features?.length && evt.features[0].properties) {
       const fp = evt.features[0].properties
-      const fs = Object.keys(fp)
-      .filter(key => key !== 'HEIGHT')
-      .filter( key =>  viewState.zoom >=15? key !=='APR_Y': key !=='USEAPR_DAY')
-      .reduce((acc, curr) => {
-        let val = fp[curr]
-        if (curr === 'BEONJI') {
-          const sub = parseInt(fp[curr].slice(4,8));
-          val = (!!sub)? `${parseInt(fp.BEONJI.slice(0,4))}-${parseInt(fp.BEONJI.slice(4,8))}번지`: `${parseInt(fp.BEONJI.slice(0,4))}번지`
-        }
-        if (curr === 'USEAPR_DAY') {
-          val = formatTooltipText(fp[curr], langToUse)
-        }
-        if (curr  === 'APR_Y') {
-          val = fp[curr].toFixed(2)
-        }
-        return [...acc, {
-          key: langToUse[popupDisplayKey[curr]],
-          value: val
-        }]
-      }, [])
+      const keySets = (viewState.zoom >=15)? highZoomPopupDisplayKey: lowZoomPopupDisplayKey
+        const fs = Object.keys(keySets)
+        .reduce((acc, curr) => {
+          let val = fp[curr]
 
-      setPopupInfo({
-        lngLat: evt.lngLat,
-        features: fs
-      });
-    }
-  
+          if (curr === 'USEAPR_DAY') {
+            val = formatTooltipText(fp[curr], langToUse)
+          }
+          if (curr  === 'APR_Y') {
+            val = fp[curr].toFixed(2)
+          }
+          if (curr === 'BEONJI' && val) {
+            const sub = parseInt(fp[curr].slice(4,8));
+            val = (!!sub)? `${parseInt(fp.BEONJI.slice(0,4))}-${parseInt(fp.BEONJI.slice(4,8))}번지`: `${parseInt(fp.BEONJI.slice(0,4))}번지`
+          }
+          return [...acc, {
+            key: langToUse[popupDisplayKey[curr]],
+            value: val
+          }]
+        }, [])
+        setPopupInfo({
+          lngLat: evt.lngLat,
+          features: fs
+        });
+        return;
+      }
     else setPopupInfo(null)
+    return
+  
+    
   }, [viewState.zoom]);
 
   function onCompareChange () {
@@ -226,7 +241,7 @@ export default function App() {
               <Layer {...matchingLayer} />
             </Source>
           })}
-        {popupInfo && (
+        {/* {popupInfo && (
           <Popup longitude={popupInfo.lngLat.lng} latitude={popupInfo.lngLat.lat}
             anchor="bottom"
             onClose={() => setPopupInfo(null)}
@@ -243,7 +258,7 @@ export default function App() {
             })}
 
           </Popup>)
-        }
+        } */}
         <ControlPanelLook
           compareMode={compareMode}
           onCompareChange={onCompareChange}
