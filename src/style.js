@@ -47,7 +47,7 @@ export const sources2023 = {
     "url": `pmtiles://${dataUrl}/bdc_2023.pmtiles`,
     minzoom: 13,
     maxzoom: 15
-  }, // Centroids don't line up :[
+  },
   "dong": {
     "type": "geojson",
     "data": `${relativeDataUrl}/dong_2023.geojson`
@@ -114,7 +114,8 @@ export function getLayers(year) {
     "source": "centroids",
     "source-layer": `bdc_${year}`,
     "type": 'circle',
-    maxzoom: 15,
+    minZoom: 13,
+    maxzoom: 15.1,
     "paint": {
       'circle-color': ["case", ["==", ["get", keyWord], null], '#666',
       ['case',...fillExtrucionColorConditions(keyWord), '#666']],
@@ -126,9 +127,10 @@ export function getLayers(year) {
     "source": "dong",
     "type": 'fill',
     minzoom: 10,
-    maxzoom: 13,
+    maxzoom: 13.5,
     "paint": {
       "fill-outline-color": "#ccc",
+      "fill-opacity": 0.8,
       'fill-color':
       // Give #666 to null value
       ["case", ["==", ["get", keyWord], null], '#666',

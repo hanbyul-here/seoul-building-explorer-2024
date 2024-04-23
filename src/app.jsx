@@ -7,6 +7,7 @@ import GeocoderControl from './geocoder';
 import { baseMapStyle, sourcesArr2017, sourcesArr2023, getLayers, getAllUpdatedHeightLayers } from './style';
 import { LanguageEng, LanguageKr } from './lang'
 import { extrudedHeightValue } from './constants';
+import 'maplibre-gl/dist/maplibre-gl.css';
 import './app.css'
 
 const INITIAL_VIEW_STATE = {
@@ -54,7 +55,6 @@ const highZoomPopupDisplayKey = {
 const lowZoomPopupDisplayKey = {
   'EMD_NM' : 'dong',
   'APR_Y': 'averageYear'
-
 }
 
 export default function App() {
@@ -108,8 +108,7 @@ export default function App() {
       const keySets = (viewState.zoom >=15)? highZoomPopupDisplayKey: lowZoomPopupDisplayKey
         const fs = Object.keys(keySets)
         .reduce((acc, curr) => {
-          let val = fp[curr]
-
+          let val = fp[curr];
           if (curr === 'USEAPR_DAY') {
             val = formatTooltipText(fp[curr], langToUse)
           }
@@ -178,7 +177,7 @@ export default function App() {
           </Source>
         })}
         {popupInfo && (
-          <Popup longitude={popupInfo.lngLat.lng} latitude={popupInfo.lngLat.lat}
+          <Popup className="popup" longitude={popupInfo.lngLat.lng} latitude={popupInfo.lngLat.lat}
             anchor="bottom"
             onClose={() => setPopupInfo(null)}
           >
@@ -243,7 +242,7 @@ export default function App() {
             </Source>
           })}
         {/* {popupInfo && (
-          <Popup longitude={popupInfo.lngLat.lng} latitude={popupInfo.lngLat.lat}
+          <Popup className="popup" longitude={popupInfo.lngLat.lng} latitude={popupInfo.lngLat.lat}
             anchor="bottom"
             onClose={() => setPopupInfo(null)}
           >

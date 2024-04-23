@@ -30,6 +30,11 @@ h1 {
   -webkit-user-select: none;
   user-select: none;
 }
+.popup {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
 
 .option-wrapper {
   height: auto;
