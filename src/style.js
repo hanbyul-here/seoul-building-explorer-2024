@@ -27,7 +27,7 @@ export const sources2017 = {
     "type": "vector",
     "url": `pmtiles://${dataUrl}/bdc_2017.pmtiles`,
     minzoom: 13,
-    maxzoom: 15
+    maxzoom: 13
   }, 
   "dong": {
     "type": "geojson",
@@ -46,7 +46,7 @@ export const sources2023 = {
     "type": "vector",
     "url": `pmtiles://${dataUrl}/bdc_2023.pmtiles`,
     minzoom: 13,
-    maxzoom: 15
+    maxzoom: 13
   },
   "dong": {
     "type": "geojson",
@@ -114,8 +114,8 @@ export function getLayers(year) {
     "source": "centroids",
     "source-layer": `bdc_${year}`,
     "type": 'circle',
-    minZoom: 13,
-    maxzoom: 15.1,
+    minzoom: 13,
+    maxzoom: 15,
     "paint": {
       'circle-color': ["case", ["==", ["get", keyWord], null], '#666',
       ['case',...fillExtrucionColorConditions(keyWord), '#666']],
