@@ -15,10 +15,7 @@ export default function useMapCompare() {
   useEffect(() => {
     if (!map2023) return;
     if (hasMapCompare) {
-      const compareControl = new MaplibreglCompare(map2017, map2023, "#wrapper", {
-        orientation: 'vertical',
-        mousemove: false
-      });
+      const compareControl = new MaplibreglCompare(map2017, map2023, "#wrapper");
       return () => {
         compareControl.remove();
       };

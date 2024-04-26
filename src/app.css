@@ -1,21 +1,12 @@
 body {
   margin: 0;
   padding: 0;
-  overflow: hidden;
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
 }
 
 h1 {
   font-size: 16px;
-}
-
-#wrapper {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
 }
 
 #control {
@@ -30,6 +21,7 @@ h1 {
   -webkit-user-select: none;
   user-select: none;
 }
+
 .popup {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
