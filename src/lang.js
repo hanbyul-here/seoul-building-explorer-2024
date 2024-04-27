@@ -9,7 +9,7 @@ export const LanguageEng = {
   show: 'Show Everything',
   title: '2024 Seoul Building Explorer',
   compare: 'Compare to 2017',
-  description: 'This map shows buildings in Seoul were approved to use. The data is from <a href="https://www.vworld.kr/dtmk/dtmk_ntads_s003.do?dsId=30524&fileNo=2">VWorld</a>. You can find the 2017 one through <a href="https://hanbyul-here.github.io/seoul-building-explorer/>this link</a>.',
+  description: 'This map shows buildings in Seoul were approved to use. The data is from <a href="https://www.vworld.kr/dtmk/dtmk_ntads_s003.do?dsId=30524&fileNo=2">VWorld</a>. You can find the 2017 one through <a href="https://hanbyul-here.github.io/seoul-building-explorer/"> this link </a>.',
   yearFormat: '/',
   monthFormat: '/',
   dayFormat: '',
